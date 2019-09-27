@@ -1,4 +1,4 @@
-# wp-underconstruction
+# WP Under Construction Mode
 A wordpress plugin to display an under construction page on your website
 
 ## About
