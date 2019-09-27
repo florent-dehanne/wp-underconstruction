@@ -1,10 +1,10 @@
 <?php
 /**
- * Plugin Name: WP Under Construction
+ * Plugin Name: WP Under Construction Mode
  * Description: Display an Under Construction page on your website.
  * Version: 1.0
  * Author: Florent Dehanne
- * Text Domain: wp-underconstruction
+ * Text Domain: wp-underconstruction-mode
  */
 
   define('UNDERCONSTRUCTION_URL', plugin_dir_url(__FILE__));
