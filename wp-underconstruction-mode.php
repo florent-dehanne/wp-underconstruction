@@ -2,12 +2,14 @@
 /**
  * Plugin Name: WP Under Construction Mode
  * Description: Display an Under Construction page on your website.
- * Version: 1.0
+ * Version: 1.1
  * Author: Florent Dehanne
+ * Author URI: https://florentdehanne.net
  * Text Domain: wp-underconstruction-mode
  */
 
   define('UNDERCONSTRUCTION_URL', plugin_dir_url(__FILE__));
+  define('UNDERCONSTRUCTION_PATH', __DIR__);
 
   class UnderConstruction {
 
@@ -22,13 +24,36 @@
       $this->maintenance = get_option('wp_underconstruction');
 
       add_action('admin_init', [$this, 'unescapeRequest']);
+      add_action('wp_enqueue_scripts', [$this, 'loadFrontendAssets']);
       add_action('admin_notices', [$this, 'maintenanceNotice']);
       add_action('get_header', [$this, 'checkMaintenance']);
       add_action('admin_menu', [$this, 'adminPages']);
       add_action('admin_action_wp_underconstruction_update', [$this, 'update']);
+      add_action('admin_bar_menu', [$this, 'maintenanceNoticeInToolbar'], 10000);
     }
 
-    /** Display a notice when maintenance is enabled. */
+    function loadFrontendAssets() {
+      wp_enqueue_style('underconstruction', UNDERCONSTRUCTION_URL.'assets/css/frontend.css', [], $this->version);
+    } // loadFrontendAssets()
+
+    /** Display a notice in admin bar when maintenance is enabled. */
+    function maintenanceNoticeInToolbar($wp_admin_bar)
+    {
+      if ($this->maintenance['enabled'])
+      {
+  			$wp_admin_bar->add_node([
+    			'id' => 'underconstruction',
+    			'parent' => 'top-secondary',
+    			'title' => 'Under construction mode enabled',
+    			'href' => admin_url('admin.php?page=underconstruction'),
+          'meta' => [
+            'class' => 'underconstruction-enabled'
+          ]
+    		]);
+      }
+    }
+
+    /** Display a notice in backend when maintenance is enabled. */
     function maintenanceNotice()
     {
       if ($this->maintenance['enabled'])
