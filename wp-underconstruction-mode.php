@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP Under Construction Mode
  * Description: Display an Under Construction page on your website.
- * Version: 1.1
+ * Version: 1.2
  * Author: Florent Dehanne
  * Author URI: https://florentdehanne.net
  * Text Domain: wp-underconstruction-mode
@@ -23,7 +23,6 @@
       $this->version = $data[0];
       $this->maintenance = get_option('wp_underconstruction');
 
-      add_action('admin_init', [$this, 'unescapeRequest']);
       add_action('wp_enqueue_scripts', [$this, 'loadFrontendAssets']);
       add_action('admin_notices', [$this, 'maintenanceNotice']);
       add_action('get_header', [$this, 'checkMaintenance']);
@@ -101,20 +100,9 @@
 
     function update()
     {
-      update_option('wp_underconstruction', $this->_POST['wp_underconstruction']);
+      update_option('wp_underconstruction', stripslashes($this->_POST['wp_underconstruction']));
       wp_redirect(admin_url('admin.php?page=underconstruction'));
       exit;
-    }
-
-    /* Wordpress issue with magic quotes.
-     * See: https://stackoverflow.com/q/8949768/1320311 */
-    function unescapeRequest()
-    {
-      $this->_GET = array_map('stripslashes_deep', $_GET);
-      $this->_POST = array_map('stripslashes_deep', $_POST);
-      $this->_COOKIE = array_map('stripslashes_deep', $_COOKIE);
-      $this->_SERVER = array_map('stripslashes_deep', $_SERVER);
-      $this->_REQUEST = array_map('stripslashes_deep', $_REQUEST);
     }
   }
 
