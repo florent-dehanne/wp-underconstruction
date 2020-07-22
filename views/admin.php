@@ -1,5 +1,6 @@
 <?php
   $underconstruction = get_option('wp_underconstruction');
+  $underconstruction = !empty($underconstruction) ? $underconstruction : ['enabled' => false];
 ?>
 
 <h1>Under Construction</h1>
@@ -43,7 +44,7 @@
         </tr>
         <tr>
           <th scope="row"><label for="wp_underconstruction_message">HTML</label></th>
-          <td><textarea name="wp_underconstruction[html]" id="wp_underconstruction_html" class="regular-text"><?php echo $underconstruction['html']; ?></textarea></td>
+          <td><textarea name="wp_underconstruction[html]" id="wp_underconstruction_html" class="regular-text" style="width: 100%; height: 400px;"><?php echo $underconstruction['html']; ?></textarea></td>
         </tr>
       </tbody>
     </table>

@@ -22,6 +22,7 @@
       $data = get_file_data(__FILE__, ['Version'], 'plugin');
       $this->version = $data[0];
       $this->maintenance = get_option('wp_underconstruction');
+      $this->maintenance = !empty($this->maintenance) ? $this->maintenance : ['enabled' => false];
 
       add_action('wp_enqueue_scripts', [$this, 'loadFrontendAssets']);
       add_action('admin_notices', [$this, 'maintenanceNotice']);
@@ -100,7 +101,7 @@
 
     function update()
     {
-      update_option('wp_underconstruction', stripslashes($this->_POST['wp_underconstruction']));
+      update_option('wp_underconstruction', stripslashes_deep($_POST['wp_underconstruction']));
       wp_redirect(admin_url('admin.php?page=underconstruction'));
       exit;
     }
