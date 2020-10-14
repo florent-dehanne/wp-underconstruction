@@ -14,7 +14,7 @@
       <tbody>
         <tr>
           <th scope="row"><label for="wp_underconstruction">Activer le mode maintenance</label></th>
-          <td><input name="wp_underconstruction[enabled]" type="checkbox" id="wp_underconstruction" value="1" <?php if ($underconstruction['enabled']): ?>checked="checked"<?php endif; ?>></td>
+          <td><input name="wp_underconstruction[enabled]" type="checkbox" id="wp_underconstruction" value="1" <?php if (array_key_exists('enabled', $underconstruction) && $underconstruction['enabled']): ?>checked="checked"<?php endif; ?>></td>
         </tr>
       </tbody>
     </table>

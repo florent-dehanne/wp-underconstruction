@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP Under Construction Mode
  * Description: Display an Under Construction page on your website.
- * Version: 1.2
+ * Version: 1.3
  * Author: Florent Dehanne
  * Author URI: https://florentdehanne.net
  * Text Domain: wp-underconstruction-mode
@@ -39,7 +39,7 @@
     /** Display a notice in admin bar when maintenance is enabled. */
     function maintenanceNoticeInToolbar($wp_admin_bar)
     {
-      if ($this->maintenance['enabled'])
+      if (array_key_exists('enabled', $this->maintenance) && $this->maintenance['enabled'])
       {
   			$wp_admin_bar->add_node([
     			'id' => 'underconstruction',
@@ -56,7 +56,7 @@
     /** Display a notice in backend when maintenance is enabled. */
     function maintenanceNotice()
     {
-      if ($this->maintenance['enabled'])
+      if (array_key_exists('enabled', $this->maintenance) && $this->maintenance['enabled'])
         echo '<div class="notice notice-error"><p><strong>Le mode maintenance est activé : votre site n\'est pas accessible aux visiteurs !</strong></p></div>';
     }
 
@@ -66,7 +66,7 @@
       if (!current_user_can('edit_themes') || !is_user_logged_in())
       {
         // Check if maintenance enabled
-        if ($this->maintenance['enabled'])
+        if (array_key_exists('enabled', $this->maintenance) && $this->maintenance['enabled'])
         {
 
           if ($this->maintenance['mode'] == 2 && $this->maintenance['url'])
