@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP Under Construction Mode
  * Description: Display an Under Construction page on your website.
- * Version: 1.3
+ * Version: 1.4
  * Author: Florent Dehanne
  * Author URI: https://florentdehanne.net
  * Text Domain: wp-underconstruction-mode
@@ -13,7 +13,7 @@
 
   class UnderConstruction {
 
-    // Plugin version.
+    // Plugin version
     public $version;
     public $maintenance = false;
 
@@ -24,8 +24,9 @@
       $this->maintenance = get_option('wp_underconstruction');
       $this->maintenance = !empty($this->maintenance) ? $this->maintenance : ['enabled' => false];
 
+      add_action('admin_enqueue_scripts', [$this, 'loadBackendAssets']);
       add_action('wp_enqueue_scripts', [$this, 'loadFrontendAssets']);
-      add_action('admin_notices', [$this, 'maintenanceNotice']);
+      add_action('admin_notices', [$this, 'maintenanceNoticeInBackend']);
       add_action('get_header', [$this, 'checkMaintenance']);
       add_action('admin_menu', [$this, 'adminPages']);
       add_action('admin_action_wp_underconstruction_update', [$this, 'update']);
@@ -33,8 +34,13 @@
     }
 
     function loadFrontendAssets() {
-      wp_enqueue_style('underconstruction', UNDERCONSTRUCTION_URL.'assets/css/frontend.css', [], $this->version);
+      wp_enqueue_style('underconstruction-frontend', UNDERCONSTRUCTION_URL.'assets/css/frontend.css', [], $this->version);
     } // loadFrontendAssets()
+
+    function loadBackendAssets() {
+      wp_enqueue_style('underconstruction-backend', UNDERCONSTRUCTION_URL.'assets/css/backend.css', [], $this->version);
+      wp_enqueue_script('underconstruction-backend', UNDERCONSTRUCTION_URL.'assets/js/backend.js', [], $this->version, true);
+    } // loadBackendAssets()
 
     /** Display a notice in admin bar when maintenance is enabled. */
     function maintenanceNoticeInToolbar($wp_admin_bar)
@@ -51,24 +57,31 @@
           ]
     		]);
       }
-    }
+    } // maintenanceNoticeInToolbar()
 
     /** Display a notice in backend when maintenance is enabled. */
-    function maintenanceNotice()
+    function maintenanceNoticeInBackend()
     {
       if (array_key_exists('enabled', $this->maintenance) && $this->maintenance['enabled'])
         echo '<div class="notice notice-error"><p><strong>Le mode maintenance est activé : votre site n\'est pas accessible aux visiteurs !</strong></p></div>';
-    }
+    } // maintenanceNoticeInBackend()
 
     /** Redirect to maintenance page */
     function checkMaintenance()
     {
-      if (!current_user_can('edit_themes') || !is_user_logged_in())
+      // Check if maintenance is enabled
+      if (array_key_exists('enabled', $this->maintenance) && $this->maintenance['enabled'])
       {
-        // Check if maintenance enabled
-        if (array_key_exists('enabled', $this->maintenance) && $this->maintenance['enabled'])
-        {
+        // Check access (by default: limited to administrators only)
+        $access = array_key_exists('access', $this->maintenance) ? $this->maintenance['access'] : 1;
 
+        if ($access == 1)
+          $accessAllowed = current_user_can('administrator');
+        else
+          $accessAllowed = is_user_logged_in();
+
+        if (!$accessAllowed)
+        {
           if ($this->maintenance['mode'] == 2 && $this->maintenance['url'])
           {
             // Redirect to custom maintenance page
@@ -89,22 +102,22 @@
           }
         }
       }
-    }
+    } // checkMaintenance()
 
     function adminPages() {
       add_menu_page('Under construction', 'Under construction', 'manage_options', 'underconstruction', [$this, 'maintenancePageContent']);
-    }
+    } // adminPages()
 
     function maintenancePageContent() {
       include(__DIR__.'/views/admin.php');
-    }
+    } // maintenancePageContent()
 
     function update()
     {
       update_option('wp_underconstruction', stripslashes_deep($_POST['wp_underconstruction']));
       wp_redirect(admin_url('admin.php?page=underconstruction'));
       exit;
-    }
+    } // update()
   }
 
   $UnderConstruction = new UnderConstruction();

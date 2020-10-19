@@ -2,9 +2,9 @@
 Contributors: fdehanne
 Tags: maintenance mode, maintenance page, coming soon page, landing page, under construction, under construction page, coming soon, launch page, coming soon mode, maintenance mode page, offline page, maintenance
 Requires at least: 5.1
-Tested up to: 5.2
+Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 1.2
+Stable tag: 1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,13 @@ This plugin allow you to create an under construction / maintenance page or mess
 3. Configure your Under construction mode in "Under Construction" page
 
 == Changelog ==
+
+= 1.4 =
+* Improve backend form
+* Add option to let only admin or all registered users to access to disabled website
+
+= 1.3 =
+* Fix warning on enabled variable
 
 = 1.2 =
 * Fix escaping on POST variables
