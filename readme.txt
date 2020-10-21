@@ -26,6 +26,9 @@ This plugin allow you to create an under construction / maintenance page or mess
 
 == Changelog ==
 
+= 1.4.1 =
+* Fix jQuery on backend.js
+
 = 1.4 =
 * Improve backend form
 * Add option to let only admin or all registered users to access to disabled website

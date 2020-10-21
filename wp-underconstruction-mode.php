@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP Under Construction Mode
  * Description: Display an Under Construction page on your website.
- * Version: 1.4
+ * Version: 1.4.1
  * Author: Florent Dehanne
  * Author URI: https://florentdehanne.net
  * Text Domain: wp-underconstruction-mode

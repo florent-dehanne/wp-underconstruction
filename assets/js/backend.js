@@ -15,18 +15,17 @@ function toggleUnderConstructionForm()
 {
   if (jQuery('#wp_underconstruction').is(':checked'))
   {
-    $('.wp_underconstruction-form').show();
+    jQuery('.wp_underconstruction-form').show();
   }
   else {
-    $('.wp_underconstruction-form').hide();
+    jQuery('.wp_underconstruction-form').hide();
   }
 }
 
 function toggleUnderConstructionFields()
 {
-  $('.display-methods-fields tr').hide();
+  var selected = jQuery('input[name="wp_underconstruction[mode]"]:checked').val();
 
-  var selected = $('input[name="wp_underconstruction[mode]"]:checked').val();
-
-  $('.display-methods-fields tr.field-' + selected).show();
+  jQuery('.display-methods-fields tr').hide();
+  jQuery('.display-methods-fields tr.field-' + selected).show();
 }
